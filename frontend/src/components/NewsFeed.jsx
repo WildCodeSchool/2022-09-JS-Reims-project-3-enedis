@@ -41,7 +41,7 @@ function NewsFeed({ communicationPlans }) {
           src="https://remeng.rosselcdn.net/sites/default/files/dpistyles_v2/ena_16_9_extra_big/2018/12/10/node_20755/530170/public/2018/12/10/B9717886568Z.1_20181210094232_000%2BGERCIOLFT.1-0.jpg?itok=t6jVgxVZ1544431361"
           alt="imagecontent"
         />
-        <div>
+        {/* <div>
           {communicationPlans.map((communicationPlan) => {
             return (
               <CommunicationPlanCard
@@ -51,7 +51,7 @@ function NewsFeed({ communicationPlans }) {
               />
             );
           })}
-        </div>
+        </div> */}
         <div className="contentofpublication">
           <h1 className="titlecontent">
             Enedis constate une baisse historique de 20% de la consommation
