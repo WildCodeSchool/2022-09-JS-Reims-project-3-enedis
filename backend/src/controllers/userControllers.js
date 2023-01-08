@@ -31,21 +31,14 @@ const read = (req, res) => {
 };
 
 const edit = (req, res) => {
-  const { firstname, lastname, city, login } = req.body;
-
-  const user = {
-    firstname,
-    lastname,
-    city,
-    login,
-  };
+  const users = req.body;
 
   // TODO validations (length, format...)
 
-  user.id = parseInt(req.params.id, 10);
+  users.id = parseInt(req.params.id, 10);
 
   models.users
-    .update(user)
+    .update(users)
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);
@@ -111,7 +104,7 @@ const login = async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
           expiresIn: "1h",
         });
-        res.send({ token });
+        res.send({ token, id: users[0].id });
       } else {
         res.sendStatus(401);
       }

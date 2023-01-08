@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./components/NavBar.css";
 import Signup from "./components/Signup/Signup";
@@ -6,15 +6,17 @@ import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Menu from "./components/Menu";
-import Profil from "./components/Profil";
+
 import Login from "./components/Login/Login";
+import { UserContext } from "./store/user-context";
+import Profile from "./components/Profile/Profile";
 
 import "./App.css";
 
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const { token } = useContext(UserContext);
 
+  const [isActive, setIsActive] = useState(false);
   const switchPage = () => {
     setIsActive(true);
   };
@@ -24,7 +26,7 @@ function App() {
 
   const login = (
     <div className="log-page">
-      <Login setIsLogged={setIsLogged} />
+      <Login />
       <button onClick={switchPage} type="button">
         Premiere fois? Creet votre compte!
       </button>
@@ -36,7 +38,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/profil" element={<Profil />} />
+        <Route path="/profil" element={<Profile />} />
       </Routes>
 
       <NavBar />
@@ -45,9 +47,9 @@ function App() {
 
   return (
     <>
-      {!isLogged && !isActive && login}
-      {!isLogged && isActive && <Signup onRes={resForm} />}
-      {isLogged && content}
+      {!token && !isActive && login}
+      {!token && isActive && <Signup onRes={resForm} />}
+      {token && content}
     </>
   );
 }

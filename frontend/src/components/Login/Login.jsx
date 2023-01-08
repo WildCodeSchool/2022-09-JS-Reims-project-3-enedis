@@ -1,6 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
-
-import PropTypes from "prop-types";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 
 import Modal from "../../UI/Modal";
 
@@ -8,9 +6,11 @@ import Card from "../../UI/Card";
 import Button from "../../UI/Button";
 import classes from "./Login.module.css";
 import { emailReducer, passwordReducer } from "./loginHelpers";
+import { UserContext } from "../../store/user-context";
 
-export default function Login({ setIsLogged }) {
-  const [token, setToken] = useState(null);
+export default function Login() {
+  const { setToken } = useContext(UserContext);
+  const { setId } = useContext(UserContext);
   const [error, setError] = useState(false);
   const [formIsValid, setFormIsValid] = useState(false);
 
@@ -51,7 +51,7 @@ export default function Login({ setIsLogged }) {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    fetch("http://localhost:5000/api/login", {
+    fetch("http://localhost:8080/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,14 +65,13 @@ export default function Login({ setIsLogged }) {
       .then((data) => {
         if (data.token) {
           setToken(data.token);
-          setIsLogged(true);
+          setId(data.id);
+        } else {
+          setTimeout(() => {
+            setError(true);
+          }, 500);
         }
       });
-    if (!token) {
-      setTimeout(() => {
-        setError(true);
-      }, 500);
-    }
   };
 
   const hideErrorMessage = () => {
@@ -127,7 +126,11 @@ export default function Login({ setIsLogged }) {
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button
+            type="submit"
+            className={classes.buttonlogin}
+            disabled={!formIsValid}
+          >
             Valider
           </Button>
         </div>
@@ -135,7 +138,3 @@ export default function Login({ setIsLogged }) {
     </Card>
   );
 }
-
-Login.propTypes = {
-  setIsLogged: PropTypes.func.isRequired,
-};
